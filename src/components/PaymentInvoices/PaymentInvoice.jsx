@@ -71,7 +71,7 @@ function PaymentInvoice() {
       };
 
       try {
-        const purchaseResponse = await axios.post('https://web-com-client-backend.vercel.app//purchase', purchase, {
+        const purchaseResponse = await axios.post('https://web-com-client-backend.vercel.app/purchase', purchase, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -93,7 +93,7 @@ function PaymentInvoice() {
       };
 
       try {
-        const paymentResponse = await axios.post('https://web-com-client-backend.vercel.app//payment', payment, {
+        const paymentResponse = await axios.post('https://web-com-client-backend.vercel.app/payment', payment, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -113,7 +113,7 @@ function PaymentInvoice() {
       };
 
       try {
-        const statusResponse = await axios.post('https://web-com-client-backend.vercel.app//subscription-status', statusData, {
+        const statusResponse = await axios.post('https://web-com-client-backend.vercel.app/subscription-status', statusData, {
           headers: {
             'Content-Type': 'application/json'
           }
