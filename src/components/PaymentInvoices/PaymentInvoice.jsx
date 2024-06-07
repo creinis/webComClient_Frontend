@@ -78,8 +78,14 @@ function PaymentInvoice() {
         });
         console.log('Purchase criada com sucesso:', purchaseResponse.data);
         createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
+        createUserDbRemind();
+      } catch (error) {
+        console.error('Erro ao criar purchase:', error);
+      }
+    };
     
-        // Passando credenciais do Master User para DB do Produto (API)
+    const createUserDbRemind = async () => {
+      try {
         const userResponse = await axios.post('https://remind-api.vercel.app/users/criar', {
           nome: purchaseData.userName,
           email: purchaseData.email,
@@ -89,15 +95,14 @@ function PaymentInvoice() {
           headers: {
             'Content-Type': 'application/json'
           }
-      });
-
-          console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
-
+        });
     
+        console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
       } catch (error) {
-        console.error('Erro ao criar purchase:', error);
+        console.error('Erro ao criar usuário:', error);
       }
     };
+    
     
 
     const createPayment = async (purchaseId) => {
