@@ -59,7 +59,7 @@ function PaymentInvoice() {
     try {
       const purchaseResponse = await createPurchase();
       await createPayment(purchaseResponse._id);
-      /* await createUserDbRemind(); */
+      await createUserDbRemind();
     } catch (error) {
       console.error('Erro no processo de compra:', error);
     }
@@ -141,8 +141,8 @@ function PaymentInvoice() {
     }
   };
 
-  /* const createUserDbRemind = async () => {
-    const token = process.env.TOKEN;
+  const createUserDbRemind = async () => {
+    const token = import.meta.env.TOKEN;
 
     try {
       const response = await axios.post('https://129.148.47.221:8000/users/criar', {
@@ -164,7 +164,7 @@ function PaymentInvoice() {
       console.error('Erro ao criar usuário no DB Remind:', error);
       throw error;
     }
-  }; */
+  };
 
   if (loading) {
     console.log('Renderizando Loading...');
