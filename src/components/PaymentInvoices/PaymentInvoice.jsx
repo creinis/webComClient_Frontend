@@ -105,10 +105,7 @@ function PaymentInvoice() {
     const token = import.meta.env.VITE_TOKEN;
     
     console.log('Token:', token);
-    console.log('Dados de compra:',purchaseData.userName,
-    purchaseData.email,
-    purchaseData.password,
-    );
+    console.log('Dados de compra:',purchaseData);
   
     try {
       const postData = {
