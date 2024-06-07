@@ -86,7 +86,7 @@ function PaymentInvoice() {
     
     const createUserDbRemind = async () => {
       try {
-        const userResponse = await axios.post('https://remind-api.vercel.app/users/criar', {
+        const userResponse = await axios.post('http://129.148.47.221:8000/users/criar', {
           nome: purchaseData.userName,
           email: purchaseData.email,
           senha: purchaseData.password,
