@@ -39,7 +39,7 @@ function PaymentInvoice() {
         console.log('Todas as informações recebidas.');
         console.log('Invoice Data: Plano', purchaseData.selectedPlan);
         console.log('Invoice Data: Compra', purchaseData);
-        console.log('Invoice Data: Pagamento', payPallPaymentInfo);
+        console.log('Invoice Data: Pagamento', purchaseData.paymentMethod);
 
         clearInterval(checkInterval);
 
@@ -69,7 +69,7 @@ function PaymentInvoice() {
         // Terms
         termsAccepted: purchaseData.termsAccepted,
       };
-
+    
       try {
         const purchaseResponse = await axios.post('https://web-com-client-backend.vercel.app/purchase', purchase, {
           headers: {
@@ -78,10 +78,27 @@ function PaymentInvoice() {
         });
         console.log('Purchase criada com sucesso:', purchaseResponse.data);
         createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
+    
+        // Passando credenciais do Master User para DB do Produto (API)
+        const userResponse = await axios.post('https://product-backend.vercel.app/criar', {
+          nome: purchaseData.userName,
+          email: purchaseData.email,
+          senha: purchaseData.password,
+          permissao: 1
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+      });
+
+        console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
+
+    
       } catch (error) {
         console.error('Erro ao criar purchase:', error);
       }
     };
+    
 
     const createPayment = async (purchaseId) => {
       const paymentInfo = getPaymentInfo();
