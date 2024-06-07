@@ -84,27 +84,6 @@ function PaymentInvoice() {
       }
     };
     
-    const createUserDbRemind = async () => {
-      try {
-        const userResponse = await axios.post('https://129.148.47.221:8000/users/criar', {
-          nome: purchaseData.userName,
-          email: purchaseData.email,
-          senha: purchaseData.password,
-          permissao: 1
-        }, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-    
-        console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
-      } catch (error) {
-        console.error('Erro ao criar usuário:', error);
-      }
-    };
-    
-    
-
     const createPayment = async (purchaseId) => {
       const paymentInfo = getPaymentInfo();
 
@@ -127,7 +106,6 @@ function PaymentInvoice() {
       }
     };
 
-
     const createStatus = async (purchaseId, paymentId) => {
       const statusData = {
         purchase_id: purchaseId,
@@ -146,6 +124,24 @@ function PaymentInvoice() {
       }
     };
 
+    const createUserDbRemind = async () => {
+      try {
+        const userResponse = await axios.post('https://129.148.47.221:8000/users/criar', {
+          nome: purchaseData.userName,
+          email: purchaseData.email,
+          senha: purchaseData.password,
+          permissao: 1
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+    
+        console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
+      } catch (error) {
+        console.error('Erro ao criar usuário:', error);
+      }
+    };
     const checkInterval = setInterval(checkData, 1000);
 
     return () => clearInterval(checkInterval);
