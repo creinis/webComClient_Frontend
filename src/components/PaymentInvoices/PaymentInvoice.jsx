@@ -151,7 +151,7 @@ function PaymentInvoice() {
         senha: purchaseData.password,
         cargo: 'PMO',
         setor: 'Account Ownner',
-        permissao: 2
+        permissao: 1
       }, {
         headers: {
           'Content-Type': 'application/json',
