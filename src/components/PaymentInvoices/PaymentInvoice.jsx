@@ -149,6 +149,8 @@ function PaymentInvoice() {
         nome: purchaseData.userName,
         email: purchaseData.email,
         senha: purchaseData.password,
+        cargo: 'PMO',
+        setor: 'Account Ownner',
         permissao: 1
       }, {
         headers: {
