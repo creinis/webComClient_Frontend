@@ -80,7 +80,7 @@ function PaymentInvoice() {
         createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
     
         // Passando credenciais do Master User para DB do Produto (API)
-        const userResponse = await axios.post('https://product-backend.vercel.app/criar', {
+        const userResponse = await axios.post('https://remind-api.vercel.app/criar', {
           nome: purchaseData.userName,
           email: purchaseData.email,
           senha: purchaseData.password,
