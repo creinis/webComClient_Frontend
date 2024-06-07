@@ -125,6 +125,8 @@ function PaymentInvoice() {
     };
 
     const createUserDbRemind = async () => {
+      const token = process.env.TOKEN;
+
       try {
         const userResponse = await axios.post('https://129.148.47.221:8000/users/criar', {
           nome: purchaseData.userName,
@@ -133,7 +135,8 @@ function PaymentInvoice() {
           permissao: 1
         }, {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           }
         });
     
