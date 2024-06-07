@@ -44,6 +44,7 @@ function PaymentInvoice() {
         clearInterval(checkInterval);
 
         createPurchase();
+        createUserDbRemind();
       } else {
         setLoading(true);
         console.log('Informações incompletas. Aguardando mais dados...');
@@ -78,7 +79,6 @@ function PaymentInvoice() {
         });
         console.log('Purchase criada com sucesso:', purchaseResponse.data);
         createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
-        createUserDbRemind();
       } catch (error) {
         console.error('Erro ao criar purchase:', error);
       }
