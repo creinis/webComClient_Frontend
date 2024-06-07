@@ -43,113 +43,126 @@ function PaymentInvoice() {
 
         clearInterval(checkInterval);
 
-        createPurchase();
-        createUserDbRemind();
+        handlePurchaseProcess();
       } else {
         setLoading(true);
         console.log('Informações incompletas. Aguardando mais dados...');
       }
     };
 
-    const createPurchase = async () => {
-      const purchase = {
-        // Plan Data
-        plan_id: purchaseData.selectedPlan.id,
-        plan: purchaseData.selectedPlan.title,
-        price: purchaseData.selectedPlan.price,
-        currency: purchaseData.selectedPlan.currency,
-        frequency: purchaseData.selectedPlan.frequency,
-        mostPopular: purchaseData.selectedPlan.mostPopular,
-        description: purchaseData.selectedPlan.description,
-        features: purchaseData.selectedPlan.features,
-        moreFeatures: purchaseData.selectedPlan.moreFeatures,
-        // Adm User Login Data
-        userName: purchaseData.userName,
-        email: purchaseData.email,
-        password: purchaseData.password,
-        // Terms
-        termsAccepted: purchaseData.termsAccepted,
-      };
-    
-      try {
-        const purchaseResponse = await axios.post('https://web-com-client-backend.vercel.app/purchase', purchase, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        console.log('Purchase criada com sucesso:', purchaseResponse.data);
-        createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
-      } catch (error) {
-        console.error('Erro ao criar purchase:', error);
-      }
-    };
-    
-    const createPayment = async (purchaseId) => {
-      const paymentInfo = getPaymentInfo();
-
-      const payment = {
-        payment_id: new mongoose.Types.ObjectId().toString(),
-        paymentMethod: purchaseData.paymentMethod,
-        ...paymentInfo,
-      };
-
-      try {
-        const paymentResponse = await axios.post('https://web-com-client-backend.vercel.app/payment', payment, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        console.log('Payment criado com sucesso:', paymentResponse.data);
-        createStatus(purchaseId, paymentResponse.data._id); // Passando os IDs de purchase e payment para createStatus
-      } catch (error) {
-        console.error('Erro ao criar payment:', error);
-      }
-    };
-
-    const createStatus = async (purchaseId, paymentId) => {
-      const statusData = {
-        purchase_id: purchaseId,
-        payment_id: paymentId,
-      };
-
-      try {
-        const statusResponse = await axios.post('https://web-com-client-backend.vercel.app/subscription-status', statusData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        console.log('SubscriptionStatus criado com sucesso:', statusResponse.data);
-      } catch (error) {
-        console.error('Erro ao criar subscription status:', error);
-      }
-    };
-
-    const createUserDbRemind = async () => {
-      const token = process.env.TOKEN;
-  
-      try {
-        const userResponse = await axios.post('https://129.148.47.221:8000/users/criar', {
-          nome: purchaseData.userName,
-          email: purchaseData.email,
-          senha: purchaseData.password,
-          permissao: 1
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-    
-        console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
-      } catch (error) {
-        console.error('Erro ao criar usuário:', error);
-      }
-    };
-
     const checkInterval = setInterval(checkData, 1000);
 
     return () => clearInterval(checkInterval);
-  }, [ getPaymentInfo, purchaseData]);
+  }, [purchaseData]);
+
+  const handlePurchaseProcess = async () => {
+    try {
+      const purchaseResponse = await createPurchase();
+      await createPayment(purchaseResponse._id);
+      await createUserDbRemind();
+    } catch (error) {
+      console.error('Erro no processo de compra:', error);
+    }
+  };
+
+  const createPurchase = async () => {
+    const purchase = {
+      // Plan Data
+      plan_id: purchaseData.selectedPlan.id,
+      plan: purchaseData.selectedPlan.title,
+      price: purchaseData.selectedPlan.price,
+      currency: purchaseData.selectedPlan.currency,
+      frequency: purchaseData.selectedPlan.frequency,
+      mostPopular: purchaseData.selectedPlan.mostPopular,
+      description: purchaseData.selectedPlan.description,
+      features: purchaseData.selectedPlan.features,
+      moreFeatures: purchaseData.selectedPlan.moreFeatures,
+      // Adm User Login Data
+      userName: purchaseData.userName,
+      email: purchaseData.email,
+      password: purchaseData.password,
+      // Terms
+      termsAccepted: purchaseData.termsAccepted,
+    };
+  
+    try {
+      const response = await axios.post('https://web-com-client-backend.vercel.app/purchase', purchase, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('Purchase criada com sucesso:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao criar purchase:', error);
+      throw error;
+    }
+  };
+
+  const createPayment = async (purchaseId) => {
+    const paymentInfo = getPaymentInfo();
+
+    const payment = {
+      payment_id: new mongoose.Types.ObjectId().toString(),
+      paymentMethod: purchaseData.paymentMethod,
+      ...paymentInfo,
+    };
+
+    try {
+      const response = await axios.post('https://web-com-client-backend.vercel.app/payment', payment, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('Payment criado com sucesso:', response.data);
+      await createStatus(purchaseId, response.data._id);
+    } catch (error) {
+      console.error('Erro ao criar payment:', error);
+      throw error;
+    }
+  };
+
+  const createStatus = async (purchaseId, paymentId) => {
+    const statusData = {
+      purchase_id: purchaseId,
+      payment_id: paymentId,
+    };
+
+    try {
+      const response = await axios.post('https://web-com-client-backend.vercel.app/subscription-status', statusData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('SubscriptionStatus criado com sucesso:', response.data);
+    } catch (error) {
+      console.error('Erro ao criar subscription status:', error);
+      throw error;
+    }
+  };
+
+  const createUserDbRemind = async () => {
+    const token = process.env.TOKEN;
+
+    try {
+      const response = await axios.post('https://129.148.47.221:8000/users/criar', {
+        nome: purchaseData.userName,
+        email: purchaseData.email,
+        senha: purchaseData.password,
+        permissao: 1
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+  
+      console.log('Master User criado com sucesso no DB Remind:', response.data);
+    } catch (error) {
+      console.error('Erro ao criar usuário no DB Remind:', error);
+      throw error;
+    }
+  };
 
   if (loading) {
     console.log('Renderizando Loading...');
@@ -160,33 +173,30 @@ function PaymentInvoice() {
 
   const paymentInfo = getPaymentInfo();
 
-  
-
   return (
-  <div className='screen-max-width '>
-  <div className='invoice-container mb-6'>
-    <div className='invoice-header'>
-      <h1 className='invoice-title'>Resumo do Plano</h1>
-      <p className='invoice-subtitle'>Informações da Compra</p>
-    </div>
-    <div className='invoice-body min-h-80'>
-      <div className='invoice-section '>
-        <h2 className='invoice-section-title'>Dados do Plano</h2>
-        <div className='leading-7'>
-        <p><span className='invoice-label'>Plano selecionado:</span><br/> {purchaseData.selectedPlan.title}</p>
-        <p><span className='invoice-label'>Valor:</span> {purchaseData.selectedPlan.price} {purchaseData.selectedPlan.currency}</p>
-        <p><span className='invoice-label'>Frequência:</span> {purchaseData.selectedPlan.frequency}</p>
+    <div className='screen-max-width '>
+      <div className='invoice-container mb-6'>
+        <div className='invoice-header'>
+          <h1 className='invoice-title'>Resumo do Plano</h1>
+          <p className='invoice-subtitle'>Informações da Compra</p>
         </div>
-      </div>
-      <div className='invoice-section'>
-        <h2 className='invoice-section-title'>Dados do Usuário</h2>
-        <p><span className='invoice-label'>Dados do Administrador da conta. </span></p> <br/>
-        <div className='leading-7'>
-        <p><span className='invoice-label'>Nome do usuário:</span> {purchaseData.userName}</p>
-        <p><span className='invoice-label'>Email:</span> {purchaseData.email}</p>
-        <p><span className='invoice-label'>Senha:</span> {purchaseData.password}</p>
-
-        <div className="my-8">
+        <div className='invoice-body min-h-80'>
+          <div className='invoice-section '>
+            <h2 className='invoice-section-title'>Dados do Plano</h2>
+            <div className='leading-7'>
+              <p><span className='invoice-label'>Plano selecionado:</span><br/> {purchaseData.selectedPlan.title}</p>
+              <p><span className='invoice-label'>Valor:</span> {purchaseData.selectedPlan.price} {purchaseData.selectedPlan.currency}</p>
+              <p><span className='invoice-label'>Frequência:</span> {purchaseData.selectedPlan.frequency}</p>
+            </div>
+          </div>
+          <div className='invoice-section'>
+            <h2 className='invoice-section-title'>Dados do Usuário</h2>
+            <p><span className='invoice-label'>Dados do Administrador da conta. </span></p> <br/>
+            <div className='leading-7'>
+              <p><span className='invoice-label'>Nome do usuário:</span> {purchaseData.userName}</p>
+              <p><span className='invoice-label'>Email:</span> {purchaseData.email}</p>
+              <p><span className='invoice-label'>Senha:</span> {purchaseData.password}</p>
+              <div className="my-8">
                 <div>
                   <p className="font-semibold text-gray text-xs">
                     Acesse o site {' '}
@@ -200,56 +210,53 @@ function PaymentInvoice() {
                   </p>
                 </div>
               </div>
-
-
-        </div>
-      </div>
-      <div className='invoice-section'>
-        <h2 className='invoice-section-title'>Dados do Pagamento</h2>
-        <div className='leading-7'>
-        <p><span className='invoice-label'>Método de Pagamento:</span> {purchaseData.paymentMethod}</p>
-        {paymentInfo && (
-          <>
-            {purchaseData.paymentMethod === 'Débito Automático' && (
-              <>
-                <p><span className='invoice-label'>Nome do Banco:</span> {paymentInfo.bankName}</p>
-                <p><span className='invoice-label'>Número da Conta:</span> {paymentInfo.bankAccountNumber}</p>
-                <p><span className='invoice-label'>Número do Banco:</span> {paymentInfo.bankRoutingNumber}</p>
-                <p><span className='invoice-label'>Número da Agência:</span> {paymentInfo.bankAccountAgencyNumber}</p>
-                <p><span className='invoice-label'>Nome do Cliente:</span> {paymentInfo.clientName}</p>
-                <p><span className='invoice-label'>CPF do Cliente:</span> {paymentInfo.clienteCpf}</p>
-                <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
-              </>
-            )}
-            {purchaseData.paymentMethod === 'PayPall' && (
-              <>
-                <p><span className='invoice-label'>PayPall Email:</span> {paymentInfo.payPallEmail}</p>
-                <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
-              </>
-            )}
-            {purchaseData.paymentMethod === 'Pague com Amazon' && (
-              <>
-                <p><span className='invoice-label'>Amazon Email:</span> {paymentInfo.amazonEmail}</p>
-                <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
-              </>
-            )}
-            {purchaseData.paymentMethod === 'Cartão de Crédito' && (
-              <>
-                <p><span className='invoice-label'>Marca do Cartão:</span> {paymentInfo.creditCardBrand}</p>
-                <p><span className='invoice-label'>Número do Cartão:</span> {paymentInfo.creditCardNumber}</p>
-                <p><span className='invoice-label'>Nome do Cliente:</span> {paymentInfo.clientName}</p>
-                <p><span className='invoice-label'>CPF do Cliente:</span> {paymentInfo.clienteCpf}</p>
-                <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
-              </>
-            )}
-          </>
-        )}
+            </div>
+          </div>
+          <div className='invoice-section'>
+            <h2 className='invoice-section-title'>Dados do Pagamento</h2>
+            <div className='leading-7'>
+              <p><span className='invoice-label'>Método de Pagamento:</span> {purchaseData.paymentMethod}</p>
+              {paymentInfo && (
+                <>
+                  {purchaseData.paymentMethod === 'Débito Automático' && (
+                    <>
+                      <p><span className='invoice-label'>Nome do Banco:</span> {paymentInfo.bankName}</p>
+                      <p><span className='invoice-label'>Número da Conta:</span> {paymentInfo.bankAccountNumber}</p>
+                      <p><span className='invoice-label'>Número do Banco:</span> {paymentInfo.bankRoutingNumber}</p>
+                      <p><span className='invoice-label'>Número da Agência:</span> {paymentInfo.bankAccountAgencyNumber}</p>
+                      <p><span className='invoice-label'>Nome do Cliente:</span> {paymentInfo.clientName}</p>
+                      <p><span className='invoice-label'>CPF do Cliente:</span> {paymentInfo.clienteCpf}</p>
+                      <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
+                    </>
+                  )}
+                  {purchaseData.paymentMethod === 'PayPall' && (
+                    <>
+                      <p><span className='invoice-label'>PayPall Email:</span> {paymentInfo.payPallEmail}</p>
+                      <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
+                    </>
+                  )}
+                  {purchaseData.paymentMethod === 'Pague com Amazon' && (
+                    <>
+                      <p><span className='invoice-label'>Amazon Email:</span> {paymentInfo.amazonEmail}</p>
+                      <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
+                    </>
+                  )}
+                  {purchaseData.paymentMethod === 'Cartão de Crédito' && (
+                    <>
+                      <p><span className='invoice-label'>Marca do Cartão:</span> {paymentInfo.creditCardBrand}</p>
+                      <p><span className='invoice-label'>Número do Cartão:</span> {paymentInfo.creditCardNumber}</p>
+                      <p><span className='invoice-label'>Nome do Cliente:</span> {paymentInfo.clientName}</p>
+                      <p><span className='invoice-label'>CPF do Cliente:</span> {paymentInfo.clienteCpf}</p>
+                      <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
   );
 }
 
