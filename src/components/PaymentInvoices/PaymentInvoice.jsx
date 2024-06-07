@@ -142,7 +142,7 @@ function PaymentInvoice() {
   };
 
   const createUserDbRemind = async (purchaseData) => {
-    const token = import.meta.env.VITE_TOKEN;
+    /* const token = import.meta.env.VITE_TOKEN; */
   
     try {
       const response = await axios.post('https://129.148.47.221:8000/users/criar', {
@@ -152,12 +152,12 @@ function PaymentInvoice() {
         cargo: 'PMO',
         setor: 'Account Ownner',
         permissao: 1
-      }, {
+      }/* , {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
-      });
+      } */);
   
       console.log('Master User criado com sucesso no DB Remind:', response.data);
     } catch (error) {
