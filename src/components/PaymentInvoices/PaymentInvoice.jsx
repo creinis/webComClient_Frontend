@@ -124,27 +124,6 @@ function PaymentInvoice() {
       }
     };
 
-    const createUserDbRemind = async () => {
-      const token = process.env.TOKEN;
-
-      try {
-        const userResponse = await axios.post('https://129.148.47.221:8000/users/criar', {
-          nome: purchaseData.userName,
-          email: purchaseData.email,
-          senha: purchaseData.password,
-          permissao: 1
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-    
-        console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
-      } catch (error) {
-        console.error('Erro ao criar usuário:', error);
-      }
-    };
     const checkInterval = setInterval(checkData, 1000);
 
     return () => clearInterval(checkInterval);
@@ -158,6 +137,28 @@ function PaymentInvoice() {
   console.log('Renderizando componente corretamente...');
 
   const paymentInfo = getPaymentInfo();
+
+  const createUserDbRemind = async () => {
+    const token = process.env.TOKEN;
+
+    try {
+      const userResponse = await axios.post('https://129.148.47.221:8000/users/criar', {
+        nome: purchaseData.userName,
+        email: purchaseData.email,
+        senha: purchaseData.password,
+        permissao: 1
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+  
+      console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
+    } catch (error) {
+      console.error('Erro ao criar usuário:', error);
+    }
+  };
 
   return (
   <div className='screen-max-width '>
