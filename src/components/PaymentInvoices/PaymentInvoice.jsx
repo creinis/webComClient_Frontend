@@ -145,11 +145,11 @@ function PaymentInvoice() {
         console.error('Erro ao criar usuário:', error);
       }
     };
-    
+
     const checkInterval = setInterval(checkData, 1000);
 
     return () => clearInterval(checkInterval);
-  }, [createUserDbRemind, getPaymentInfo, purchaseData]);
+  }, [ getPaymentInfo, purchaseData]);
 
   if (loading) {
     console.log('Renderizando Loading...');
