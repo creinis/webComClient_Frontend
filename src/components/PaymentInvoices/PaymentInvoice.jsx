@@ -80,16 +80,14 @@ function PaymentInvoice() {
         createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
     
         // Passando credenciais do Master User para DB do Produto (API)
-        const userResponse = await axios.post('https://remind-api.vercel.app/criar', {
-          nome: purchaseData.userName,
-          email: purchaseData.email,
-          senha: purchaseData.password,
-          permissao: 1
-        }, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-      });
+          const userResponse = await axios.post('https://remind-api.vercel.app/criar', {
+            email: purchaseData.email,
+            senha: purchaseData.password
+          }, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+            });
 
           console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
 
