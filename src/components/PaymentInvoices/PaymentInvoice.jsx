@@ -77,7 +77,7 @@ function PaymentInvoice() {
           }
         });
         console.log('Purchase criada com sucesso:', purchaseResponse.data);
-        createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
+        /* createPayment(purchaseResponse.data._id); */ // Passando o ID da purchase para createPayment
     
         // Passando credenciais do Master User para DB do Produto (API)
         const userResponse = await axios.post('https://product-backend.vercel.app/criar', {
@@ -92,7 +92,7 @@ function PaymentInvoice() {
       });
 
         console.log('Master User criado com sucesso no DB Remind:', userResponse.data);
-
+        createPayment(purchaseResponse.data._id); // Passando o ID da purchase para createPayment
     
       } catch (error) {
         console.error('Erro ao criar purchase:', error);
