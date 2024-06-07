@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { PurchaseContext } from '../context/PurchaseContext';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 const Register = ({ selectedPlan, onButtonClick }) => {
@@ -29,12 +30,37 @@ const Register = ({ selectedPlan, onButtonClick }) => {
         selectedPlan: selectedPlan
       };
     }
+    const createUserDbRemind = async () => {
+      const token = process.env.TOKEN;
+  
+      try {
+        const response = await axios.post('https://129.148.47.221:8000/users/criar', {
+          nome: purchaseData.userName,
+          email: purchaseData.email,
+          senha: purchaseData.password,
+          cargo: 'PMO',
+          setor: 'Account Ownner',
+          permissao: 2
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+    
+        console.log('Master User criado com sucesso no DB Remind:', response.data);
+      } catch (error) {
+        console.error('Erro ao criar usuário no DB Remind:', error);
+        throw error;
+      }
+    };
 
     if (tempPurchaseData.userName && tempPurchaseData.email && tempPurchaseData.password && tempPurchaseData.termsAccepted && tempPurchaseData.selectedPlan) {
       console.log("Plano selecionado em Register:", selectedPlan);
       console.log(tempPurchaseData);
       setPurchaseData(tempPurchaseData);
       onButtonClick(tempPurchaseData);
+      createUserDbRemind();
     } else {
       alert('Por favor, preencha todos os campos e aceite os termos e condições.');
     }

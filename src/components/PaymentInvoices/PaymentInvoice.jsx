@@ -59,7 +59,7 @@ function PaymentInvoice() {
     try {
       const purchaseResponse = await createPurchase();
       await createPayment(purchaseResponse._id);
-      await createUserDbRemind();
+      /* await createUserDbRemind(); */
     } catch (error) {
       console.error('Erro no processo de compra:', error);
     }
@@ -141,7 +141,7 @@ function PaymentInvoice() {
     }
   };
 
-  const createUserDbRemind = async () => {
+  /* const createUserDbRemind = async () => {
     const token = process.env.TOKEN;
 
     try {
@@ -164,7 +164,7 @@ function PaymentInvoice() {
       console.error('Erro ao criar usuário no DB Remind:', error);
       throw error;
     }
-  };
+  }; */
 
   if (loading) {
     console.log('Renderizando Loading...');
