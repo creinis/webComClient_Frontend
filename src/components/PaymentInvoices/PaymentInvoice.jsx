@@ -141,9 +141,9 @@ function PaymentInvoice() {
     }
   };
 
-  const createUserDbRemind = async () => {
-    const token = import.meta.env.TOKEN;
-
+  const createUserDbRemind = async (purchaseData) => {
+    const token = import.meta.env.VITE_TOKEN;
+  
     try {
       const response = await axios.post('https://129.148.47.221:8000/users/criar', {
         nome: purchaseData.userName,
@@ -155,7 +155,7 @@ function PaymentInvoice() {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
   
@@ -165,6 +165,7 @@ function PaymentInvoice() {
       throw error;
     }
   };
+
 
   if (loading) {
     console.log('Renderizando Loading...');
