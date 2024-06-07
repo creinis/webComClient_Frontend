@@ -13,6 +13,7 @@ function PaymentInvoice() {
     amazonPaymentInfo, 
     bankTransferPaymentInfo 
   } = useContext(PaymentContext);
+  
   const [loading, setLoading] = useState(true);
 
   const getPaymentInfo = () => {
@@ -57,11 +58,9 @@ function PaymentInvoice() {
 
   const handlePurchaseProcess = async () => {
     try {
-      const purchaseResponse = 
-      await createPurchase();
-      await createUserDbRemind();
+      const purchaseResponse = await createPurchase();
+      await createUserDbRemind(purchaseResponse);
       await createPayment(purchaseResponse._id);
-      
     } catch (error) {
       console.error('Erro no processo de compra:', error);
     }
@@ -86,7 +85,7 @@ function PaymentInvoice() {
       // Terms
       termsAccepted: purchaseData.termsAccepted,
     };
-  
+
     try {
       const response = await axios.post('https://web-com-client-backend.vercel.app/purchase', purchase, {
         headers: {
@@ -103,10 +102,10 @@ function PaymentInvoice() {
 
   const createUserDbRemind = async (purchaseData) => {
     const token = import.meta.env.VITE_TOKEN;
-    
+
     console.log('Token:', token);
-    console.log('Dados de compra:',purchaseData);
-  
+    console.log('Dados de compra:', purchaseData);
+
     try {
       const postData = {
         nome: purchaseData.userName,
@@ -116,16 +115,16 @@ function PaymentInvoice() {
         setor: 'Account Ownner',
         permissao: 1
       };
-      
+
       console.log('Dados do POST:', postData);
-  
+
       const response = await axios.post('https://129.148.47.221:8000/users/criar', postData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-    
+
       console.log('Resposta do POST:', response);
       console.log('Master User criado com sucesso no DB Remind:', response.data);
     } catch (error) {
@@ -133,7 +132,6 @@ function PaymentInvoice() {
       throw error;
     }
   };
-  
 
   const createPayment = async (purchaseId) => {
     const paymentInfo = getPaymentInfo();
@@ -177,7 +175,6 @@ function PaymentInvoice() {
     }
   };
 
-  
   if (loading) {
     console.log('Renderizando Loading...');
     return <div className='mt-4 buynow-card-text-sm'>Loading...</div>;
