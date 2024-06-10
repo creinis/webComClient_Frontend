@@ -123,8 +123,8 @@ const Hero = () => {
           />
         ))}
         <div className='absolute'>
-          <p id="hero" className='hero-title' style={{color: '#443368'}}>Remind</p>
-          <div className='md:w-10/12 w-9/12'></div>
+          <p id="hero" className='hero-title'>Remind</p>
+          
         </div>
       </div>
       <div className='absolute top-68 left-1/2 transform -translate-x-1/2'>

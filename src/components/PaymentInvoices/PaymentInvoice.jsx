@@ -103,8 +103,8 @@ function PaymentInvoice() {
   const createUserDbRemind = async (purchaseData) => {
     const token = import.meta.env.VITE_TOKEN;
 
-    console.log('Token:', token);
-    console.log('Dados de compra:', purchaseData);
+    /* console.log('Token:', token);
+    console.log('Dados de compra:', purchaseData); */
 
     try {
       const postData = {
@@ -125,8 +125,7 @@ function PaymentInvoice() {
         }
       });
 
-      console.log('Resposta do POST:', response);
-      console.log('Master User criado com sucesso no DB Remind:', response.data);
+      console.log('Master User criado com sucesso no DB Remind:', response);
     } catch (error) {
       console.error('Erro ao criar usuário no DB Remind:', error);
       throw error;

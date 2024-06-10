@@ -96,16 +96,16 @@ body {
     @apply w-full flex flex-col md:flex-row gap-5 items-center
   }
 
-/*   .link {
+  .link {
     @apply text-purple-500 hover:underline cursor-pointer flex items-center text-xl opacity-0 translate-y-20
-  } */
+  }
 
   .control-btn {
     @apply ml-4 p-4 rounded-full bg-gray-300 backdrop-blur flex-center
   }
 
   .hero-title {
-    @apply text-center font-semibold text-9xl md:text-7xl lg:text-9xl xl:text-9xl text-semantic-purple opacity-0 max-md:mb-10
+    @apply text-center font-semibold text-9xl text-primary opacity-0 max-md:mb-10
   }
 
   .buynow-title {
