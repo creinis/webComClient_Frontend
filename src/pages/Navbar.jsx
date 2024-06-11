@@ -1,16 +1,16 @@
 'use strict';
-import { bagImg, logoImg, searchImg } from '../utils'
+import { bagImg, /* logoImg, */ searchImg } from '../utils'
 import { navLists } from "../constants";
 
 const Navbar = () => {
   return (
     <header className='w-full py-6 sm:px-10 px-2 bg-zinc flex'>
         <nav className='flex w-full screen-max-width'>
-            <img 
+            {/* <img 
                 src={logoImg} 
                 alt='Remind' 
                 width={30} 
-                height={30}/> 
+                height={30}/>  */}
                 <p className=' mt-1 font-thin lg:text-2xl md:text-xl text-md text-neutral-100' 
                 style={{
                     fontFamily: 'praise', 
