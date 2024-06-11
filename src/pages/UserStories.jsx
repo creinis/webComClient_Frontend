@@ -89,7 +89,7 @@ const UserStories = () => {
                 </div>
               </div>
 
-              <div className="userStories-text-container">
+              <div className="userStories-text-container" style={{textWrap: 'balanced'}}>
                 <div className="flex-1 flex-center">
                   <p className="userStories-text g_text" style={{textAlign: 'left'}} >
                   <span className="text-white">
@@ -100,7 +100,7 @@ const UserStories = () => {
                   </p>
                 </div>
 
-                <div className="flex-1 flex-center">
+                <div className="flex-1 flex-center " style={{textWrap: 'balanced'}}>
                 <p className="userStories-text g_text" style={{textAlign: 'left'}} >
                   <span className="text-white">
                     Carlos Eduardo 

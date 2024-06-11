@@ -77,7 +77,10 @@ body {
   }
     
   .userStories-text {
-    @apply text-gray max-w-md text-lg md:text-xl font-semibold opacity-0 translate-y-[100px]
+    @apply text-gray max-w-md text-lg md:text-xl font-semibold opacity-0 translate-y-[100px] whitespace-normal text-justify leading-relaxed;
+    hyphens: auto;
+    text-justify: inter-word;
+    text-wrap: 'balanced';
   }
 
   .userStories-container {
