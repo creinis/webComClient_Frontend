@@ -254,7 +254,7 @@ function PaymentInvoice() {
                   {purchaseData.paymentMethod === 'Cartão de Crédito' && (
                     <>
                       <p><span className='invoice-label'>Marca do Cartão:</span> {paymentInfo.creditCardBrand}</p>
-                      <p><span className='invoice-label'>Número do Cartão:</span> {paymentInfo.creditCardNumber}</p>
+                      <p><span className='invoice-label'>Número do Cartão:</span>  **** **** **** {paymentInfo.creditCardNumber.slice(-4)}</p>
                       <p><span className='invoice-label'>Nome do Cliente:</span> {paymentInfo.clientName}</p>
                       <p><span className='invoice-label'>CPF do Cliente:</span> {paymentInfo.clienteCpf}</p>
                       <p><span className='invoice-label'>Renovação automática:</span> <span className='text-green-600'> Ativa</span></p>
