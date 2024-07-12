@@ -5,7 +5,7 @@
    <img src="https://img.icons8.com/color/75/000000/react-native.png" width="75" height="75" alt="React" style="margin: 10px 15px 0 15px;" />
    <img src="https://img.icons8.com/color/75/000000/javascript.png" width="75" height="75" alt="JavaScript" style="margin: 10px 15px 0 15px;" />
    <img src="https://img.icons8.com/color/75/000000/tailwindcss.png" width="75" height="75" alt="Tailwind CSS" style="margin: 10px 15px 0 15px;" />
-   <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/gsap-colored.svg" width="75" height="75" alt="GSAP" style="margin: 10px 15px 0 15px;" />
+   <img src="https://i.ytimg.com/vi/he2qlNu-vRQ/maxresdefault.jpg" width="75" height="75" alt="GSAP" style="margin: 10px 15px 0 15px;" />
    <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/mongodb-colored.svg" width="75" height="75" alt="MongoDB" style="margin: 10px 15px 0 15px;" />
    <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/express-colored.svg" width="75" height="75" alt="Express" style="margin: 10px 15px 0 15px;" />
    <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/nodejs-colored.svg" width="75" height="75" alt="NodeJS" style="margin: 10px 15px 0 15px;" />
