@@ -1,4 +1,5 @@
 # Webcom Client
+A fully custom commercial landing page.
 
 ###### Technologies:
 <p align="center">
